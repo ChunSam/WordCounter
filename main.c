@@ -3,13 +3,18 @@
 #include <string.h>
 #include <ctype.h>
 
-#define MAX_TOKEN 100 // ÇÑ ´Ü¾î ÃÖ´ë ±æÀÌ
-#define BUF_SIZE 4096 // ¹öÆÛ Å©±â
+#define MAX_TOKEN 100 // í•œ ë‹¨ì–´ ìµœëŒ€ ê¸¸ì´
+#define BUF_SIZE 4096 // ë²„í¼ í¬ê¸°
 
-//ÇÔ¼ö ¼±¾ğ
+typedef struct {
+    unsigned long word_count;
+    unsigned long line_count;
+} WordCount;
+
+//í•¨ìˆ˜ ì„ ì–¸
 void print_usage(const char *progname);
 FILE *open_text_file(const char *path);
-unsigned long count_words(FILE *fp);
+WordCount count_words(FILE *fp);
 int is_delimiter(int ch);
 
 int main(int argc, char *argv[])
@@ -23,20 +28,21 @@ int main(int argc, char *argv[])
     FILE *fp = open_text_file(argv[1]);
     if (!fp) return EXIT_FAILURE;
 
-    unsigned long word_count = count_words(fp);
-    printf("´Ü¾î °³¼ö: %lu\n", word_count);
+    WordCount wc = count_words(fp);
+    printf("ë‹¨ì–´ ê°œìˆ˜: %lu\n", wc.word_count);
+    printf("ì¤„ ê°œìˆ˜: %lu\n", wc.line_count);
 
     fclose(fp);
 
-    printf("ÇÁ·Î±×·¥ Á¾·á\n");
+    printf("í”„ë¡œê·¸ë¨ ì¢…ë£Œ\n");
 
     return EXIT_SUCCESS;
 }
 
-// ÇÔ¼ö Á¤ÀÇ
+// í•¨ìˆ˜ ì •ì˜
 void print_usage(const char *progname)
 {
-    printf("»ç¿ë¹ı: %s <ÅØ½ºÆ® ÆÄÀÏ °æ·Î>\n", progname);
+    printf("ì‚¬ìš©ë²•: %s <í…ìŠ¤íŠ¸ íŒŒì¼ ê²½ë¡œ>\n", progname);
 }
 
 FILE *open_text_file(const char *path)
@@ -44,26 +50,32 @@ FILE *open_text_file(const char *path)
     FILE *fp = fopen(path, "r");
     if (!fp)
     {
-        perror("ÆÄÀÏ ¿­±â ½ÇÆĞ");
+        perror("íŒŒì¼ ì—´ê¸° ì‹¤íŒ¨");
     }
     return fp;
 }
 
-/* ÇÙ½É ÇÔ¼ö: ´Ü¾î ¼¼±â */
-unsigned long count_words(FILE *fp)
+/* í•µì‹¬ í•¨ìˆ˜: ë‹¨ì–´ ì„¸ê¸° */
+WordCount count_words(FILE *fp)
 {
     char buffer[BUF_SIZE];
-    unsigned long wc = 0;
+    WordCount wc = {0, 0};
     int in_word = 0;
+    int in_line = 0;
 
     while (fgets(buffer, sizeof(buffer), fp)) {
         for (char *p = buffer; *p; ++p) {
             if (is_delimiter(*p)) {
                 in_word = 0;
+                if (*p == '\n') in_line = 0;
             } else {
                 if (!in_word) {
-                    wc++;
+                    wc.word_count++;
                     in_word = 1;
+                    if (!in_line) {
+                        wc.line_count++;
+                        in_line = 1;
+                    }
                 }
             }
         }
@@ -73,5 +85,5 @@ unsigned long count_words(FILE *fp)
 
 int is_delimiter(int ch)
 {
-    return ch == ' ' || ch == '\n' || ch == '\t' || ch == '\r';
+    return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';
 }
