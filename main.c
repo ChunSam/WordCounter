@@ -15,7 +15,6 @@ typedef struct {
 void print_usage(const char *progname);
 FILE *open_text_file(const char *path);
 WordCount count_words(FILE *fp);
-int is_delimiter(int ch);
 
 int main(int argc, char *argv[])
 {
@@ -65,7 +64,7 @@ WordCount count_words(FILE *fp)
 
     while (fgets(buffer, sizeof(buffer), fp)) {
         for (char *p = buffer; *p; ++p) {
-            if (is_delimiter(*p)) {
+            if (isspace((unsigned char)*p)) {
                 in_word = 0;
                 if (*p == '\n') in_line = 0;
             } else {
@@ -81,9 +80,3 @@ WordCount count_words(FILE *fp)
         }
     }
     return wc;
-}
-
-int is_delimiter(int ch)
-{
-    return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n';
-}
