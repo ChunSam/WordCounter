@@ -1,13 +1,21 @@
-The quick  brown   fox	jumps over
+# Section 1 – Famous Pangram
+The quick  brown  fox	jumps over
 the lazy dog.
+THE QUICK BROWN FOX? Yes—again, the quick brown fox!
 
-123 456
-탭과 공백이 섞인   문장입니다.	여기엔	숫자와	한글이 함께 있죠!
+# Section 2 – Numbers & Symbols
+Price: $123,456.78
+Phone: +1‑800‑555‑0199
+Serial: SN‑A1B2‑C3D4‑E5F6
 
-C 언어는 저수준␣(low-level)처럼 보이지만,  
-시스템 프로그래밍의 핵심입니다.
+# Section 3 – Mixed Case Sentences
+C is powerful; c is portable.  Portability matters!
+Error: NULL pointer dereference.  WARNING: Undefined behavior!!!
 
-공백 여러 개     연속!
-줄바꿈도
-여러 줄로
-확인해 보세요.
+# Section 4 – Multiple Spaces, Tabs, and Blank Lines
+Tabs	and		spaces	  together	   should	    not	   break		counting.
+
+Blank line below follows.
+
+
+End of file—no Korean characters here.
